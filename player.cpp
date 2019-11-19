@@ -17,34 +17,25 @@ void playerRetangle::draw(RenderWindow& window, int x, int y) {
  * 3 = Down
 */
 
-void playerRetangle::changeDirection(int& x, int& y, int& dir, int& speedSlow) {
+void playerRetangle::changeDirection(int& x, int& y, int& dir) {
 	
 	//To make sure the player doesn't end up half on the grid. Now the player can only move 10 pixels instead of 5.
 	//Without having to make the player go 10 pixel per frame.
-	if (((x % 10) == 0 ) && ((y % 10) == 0)) {
-		speedSlow = 0;
+	if ((GetAsyncKeyState('D')) && !(dir == 1)) {
+		dir = 0;
 	}
-	else {
-		speedSlow = 1;
+	else if ((GetAsyncKeyState('A')) && !(dir == 0)) {
+		dir = 1;
 	}
-
-	if (speedSlow == 0) {
-		if ((GetAsyncKeyState('D')) && !(dir == 1)) {
-			dir = 0;
-		}
-		else if ((GetAsyncKeyState('A')) && !(dir == 0)) {
-			dir = 1;
-		}
-		else if ((GetAsyncKeyState('W')) && !(dir == 3)) {
-			dir = 2;
-		}
-		else if ((GetAsyncKeyState('S')) && !(dir == 2)) {
-			dir = 3;
-		}
-		else if (GetAsyncKeyState('F')) {
-			x = 600;
-			y = 400;
-		}
+	else if ((GetAsyncKeyState('W')) && !(dir == 3)) {
+		dir = 2;
+	}
+	else if ((GetAsyncKeyState('S')) && !(dir == 2)) {
+		dir = 3;
+	}
+	else if (GetAsyncKeyState('F')) {
+		x = 20;
+		y = 20;
 	}
 
 }

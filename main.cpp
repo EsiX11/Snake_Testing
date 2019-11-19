@@ -21,22 +21,25 @@ void drawBackground(RenderWindow& window,int x, int y) {
 */
 int main(){
 
-	const int FPS(30); // Sets FPS to 30 so it will always run at the same speed
+	const int FPS(60); // Sets FPS to 30 so it will always run at the same speed
 	const int sizeWindowX(600), sizeWindowY(400); //Sets the size of the window to a const so it re-usable
-	const int speed(5); //Sets the speed of the player.
+	const int speed(10); //Sets the speed of the player.
 	int playerX(sizeWindowX / 2), playerY(sizeWindowY / 2); //Default spawning location for player. Player starts in center
 	int appleX, appleY;
-	int slowingDownPlayer(0); //Only triggers once at the beginning. (for now)
+	int slowingDownPlayer(1); //Only triggers once at the beginning. (for now)
 	int dir(4); //Default direction for player. Which is the middle of the screen and doesn't move
 	int points(0);
 	bool alive = true; 
-	bool appleHit = false; //set to true to trigger setting apple at random location. Once set it will set it self to false
-	
+	bool appleHit = false; //set to true to trigger setting apple at random location. Once set it will set it self to false (Not true atm)
+	int testTimer(0);
 	
 
-	RenderWindow window(VideoMode(sizeWindowX, sizeWindowY), "Snake!"); // Create the main window
+	RenderWindow window(VideoMode(sizeWindowX, sizeWindowY, 32), "Snake!"); // Create the main window
 
 	window.setFramerateLimit(FPS); // Sets FPS to 60 so it will always run at the same speed
+
+	Clock playClock;
+	Time time1;
 
 	playerRetangle pMove;
 	checkPlayer pCheck;
@@ -58,35 +61,45 @@ int main(){
 		}
 
 
-		// Clear screen
+		time1 = playClock.getElapsedTime();
 
-		window.clear();
-		drawBackground(window, sizeWindowX, sizeWindowY);
+		cout << time1.asMilliseconds() << endl;
+
+		// Clear screen
+		
 		
 		//Player drawing + moving
 		if (alive) {
-			pMove.changeDirection(playerX, playerY, dir,slowingDownPlayer); //checks user input (change name)
-			pMove.moveDirection(playerX, playerY, dir, speed); //changes direction
+			window.clear();
+			drawBackground(window, sizeWindowX, sizeWindowY);
+			pMove.changeDirection(playerX, playerY, dir); //checks user input (change name)
+			//Slows the game down and makes it able to move in jumps of 10 instead of 5 which is half of the blocks size.
+			if (time1.asMilliseconds() >= 100) {
+				pMove.moveDirection(playerX, playerY, dir, speed); //changes direction. X & Y changed here.
+				pCheck.outOfBounds(playerX, playerY, alive, sizeWindowX, sizeWindowY); //check if player is out of bounds
+				pCheck.hitApple(playerX, playerY, appleX, appleY, appleHit); //checks if player hit apple
+				if (appleHit) {
+					points++;
+					apple.spawnLocation(sizeWindowX, sizeWindowY, appleX, appleY); //Randomly chooses apple location
+					tail.grow(playerX, playerY, dir, speed, points); //Increases tail length (might be useless)
+					appleHit = false;
+				}
+				if (points > 0) {
+					tail.move(dir, speed, points - 1); //Moves tail with head (Fix this)
+				}
+				playClock.restart();
+			}
+			if (points > 0) {
+				tail.draw(window, points); //draws tail (Doesn't draw in correct position)(Check notebook)
+			}
 			pMove.draw(window, playerX, playerY); //Draws player rectangle
-			pCheck.outOfBounds(playerX, playerY, alive, sizeWindowX, sizeWindowY); //check if player is out of bounds
-			pCheck.hitApple(playerX, playerY, appleX, appleY, appleHit); //checks if player hit apple
-			if (appleHit) {
-				apple.spawnLocation(sizeWindowX, sizeWindowY, appleX, appleY); //Randomly chooses apple location
-				tail.grow(playerX, playerY, slowingDownPlayer, dir); //Increases tail length
-				points++;
-				appleHit = false;
-			}
 			apple.draw(window, appleX, appleY); //draws apple at it's assigned random location
-			for (int i(0); i < points; i++) {
-				tail.draw(window); //draws tail (not yet working correctly)
-			}
-			tail.move(dir, speed); //Moves tail with head (Not yet working correctly)
 		}
 		else {
 			playerLost.lostText(window, sizeWindowX, sizeWindowY);
 		}
-		// Update the window			
-		window.display();
+	// Update the window			
+	window.display();
 	}
 	return EXIT_SUCCESS;
 }

@@ -19,40 +19,41 @@ void lost::lostText(RenderWindow& window, const int sizeX, const int SizeY) {
 	window.draw(text);
 }
 
-void snakeTail::grow(const int x, const  int y, const int timer, const int playerDir) {
-	tailX = x;
-	tailY = y;
-	if (timer == 1) {
-		/* 
-		 * 0 = player moving Right
-		 * 1 = player moving Left
-		 * 2 = player moving Up
-		 * 3 = player moving Down
-		*/
-		switch (playerDir) {
-			case 0: tailX -= 5;
-					break;
-			case 1: tailX += 5;
-					break;
-			case 2: tailY += 5;
-					break;
-			case 3: tailY -= 5;
-					break;
-		}
+void snakeTail::grow(const int x, const  int y, const int playerDir, const int speed, const int size) {
+	/* 
+	 * 0 = player moving Right
+	 * 1 = player moving Left
+	 * 2 = player moving Up
+	 * 3 = player moving Down
+	*/
+	switch (playerDir) {
+		case 0: tailX.push_back((x - 15));
+				tailY.push_back(y);
+				break;
+		case 1: tailX.push_back((x + 15));
+				tailY.push_back(y);
+				break;
+		case 2: tailY.push_back((y + 15));
+				tailX.push_back(x);
+				break;
+		case 3: tailY.push_back((y - 15));
+				tailX.push_back(x);
+				break;
+		default: tailY.push_back(1000);
 	}
 
 }
-
-void snakeTail::draw(RenderWindow& window) {
+void snakeTail::draw(RenderWindow& window,const int size) {
 	RectangleShape rectangle;
 	rectangle.setSize(Vector2f(10, 10));
 	rectangle.setFillColor(Color::Green);
-	rectangle.move(Vector2f(tailX, tailY));
+	rectangle.setPosition(Vector2f(tailX[size - 1], tailY[size - 1]));
 
 	window.draw(rectangle);
+	test++;
 }
 
-void snakeTail::move(const int playerDir, const int speed) {
+void snakeTail::move(const int playerDir, const int speed, const int size) {
 	/*
 	 * 0 = player moving Right
 	 * 1 = player moving Left
@@ -60,15 +61,15 @@ void snakeTail::move(const int playerDir, const int speed) {
 	 * 3 = player moving Down
 	*/
 	switch (playerDir) {
-		case 0: tailX += speed*2;
+		case 0: tailX.at(size) += speed;
 				break;
-		case 1: tailX -= speed*2;
+		case 1: tailX.at(size) -= speed;
+				break; 
+		case 2: tailY.at(size) -= speed;
 				break;
-		case 2: tailY -= speed*2;
+		case 3: tailY.at(size) += speed;
 				break;
-		case 3: tailY += speed*2;
-				break;
-		default: tailX = tailX; tailY = tailY;
+		default: tailX.at(size) = tailX[size]; tailY[size] = tailY[size];
 				break;
 	}
 }
