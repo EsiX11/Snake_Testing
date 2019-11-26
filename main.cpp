@@ -33,11 +33,9 @@ int main(){
 	bool appleHit = false; //set to true to trigger setting apple at random location. Once set it will set it self to false (Not true atm)
 	int testTimer(0);
 	
-
 	RenderWindow window(VideoMode(sizeWindowX, sizeWindowY, 32), "Snake!"); // Create the main window
 
 	window.setFramerateLimit(FPS); // Sets FPS to 60 so it will always run at the same speed
-
 
 	//random location for apple
 	apple.spawnLocation(sizeWindowX, sizeWindowY, appleX, appleY);
@@ -52,40 +50,30 @@ int main(){
 			if (event.type == Event::Closed)
 				window.close();
 		}
-
-
 		time1 = playClock.getElapsedTime();
-
-		cout << time1.asMilliseconds() << endl;
-
-		// Clear screen
-		
-		
 		//Player drawing + moving
 		if (alive) {
+			// Clear screen
 			window.clear();
 			drawBackground(window, sizeWindowX, sizeWindowY);
 			pMove.changeDirection(playerX, playerY, dir); //checks user input (change name)
 			//Slows the game down and makes it able to move in jumps of 10 instead of 5 which is half of the blocks size.
 			if (time1.asMilliseconds() >= 100) {
-
-				tail.currentPosPlayer(playerX, playerY, dir, points);
+				tail.currentPosPlayer(playerX, playerY);
 				pMove.moveDirection(playerX, playerY, dir, speed); //changes direction. X & Y changed here.
-				//pCheck.outOfBounds(playerX, playerY, alive, sizeWindowX, sizeWindowY); //check if player is out of bounds
+				pCheck.outOfBounds(playerX, playerY, alive, sizeWindowX, sizeWindowY); //check if player is out of bounds
 				pCheck.hitApple(playerX, playerY, appleX, appleY, appleHit); //checks if player hit apple
-
 				if (appleHit) { //Fix it not growing after getting 1 but not 2
-					tail.grow(dir, points); //Increases tail length (By pushing back vector with a 0)
 					points++;
+					tail.grow(); //Increases tail length (By pushing back vector with a 0)
 					apple.spawnLocation(sizeWindowX, sizeWindowY, appleX, appleY); //Randomly chooses apple location
 					appleHit = false;
 				}
 				tail.move();
-
 				playClock.restart();
 			}
 			if (points > 0) {
-				tail.draw(window, points); //draws tail (Doesn't draw in correct position)(Check notebook)
+				tail.draw(window); //draws tail (Doesn't draw in correct position)(Check notebook)
 			}
 			pMove.draw(window, playerX, playerY); //Draws player rectangle
 			apple.draw(window, appleX, appleY); //draws apple at it's assigned random location

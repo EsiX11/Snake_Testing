@@ -20,8 +20,8 @@ void lost::lostText(RenderWindow& window, const int sizeX, const int SizeY) {
 }
 
 
-void snakeTail::draw(RenderWindow& window, const int size) {
-	for (int i(0); i < size; i++) {
+void snakeTail::draw(RenderWindow& window) {
+	for (int i(0); i < tailX.size(); i++) {
 		rectangle.setSize(Vector2f(10, 10));
 		rectangle.setFillColor(Color::Green);
 		rectangle.setPosition(Vector2f(tailX[i], tailY[i]));
@@ -29,41 +29,20 @@ void snakeTail::draw(RenderWindow& window, const int size) {
 	}
 }
 
-void snakeTail::grow(const int playerDir, const int size) {
+void snakeTail::grow() {
 	tailX.push_back(0);
 	tailY.push_back(0);
 }
 
-void snakeTail::currentPosPlayer(const int x, const  int y, const int playerDir, const int size) {
+void snakeTail::currentPosPlayer(const int x, const  int y) {
 	if (tailX.empty()) {
 		tailX.resize(1);
 		tailY.resize(1);
 	}
-	/*
-	 * 0 = player moving Right
-	 * 1 = player moving Left
-	 * 2 = player moving Up
-	 * 3 = player moving Down
-	*/
-	switch (playerDir) {
-		case 0: tailX.at(0) = x;
-				tailY.at(0) = y;
-				break;
-		case 1: tailX.at(0) = x;
-				tailY.at(0) = y;
-				break;
-		case 2: tailY.at(0) = y;
-				tailX.at(0) = x;
-				break;
-		case 3: tailY.at(0) = y;
-				tailX.at(0) = x;
-				break;
-		default: tailX.at(0) = tailX.at(0); tailY.at(0) = tailY.at(0);
-				break;
-	}
+	tailX.at(0) = x;
+	tailY.at(0) = y;
 
 }
-
 void snakeTail::move() {
 	for (int i(0); i < tailX.size(); i++) {
 		int max((tailX.size() - 1) - i);
