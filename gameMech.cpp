@@ -52,3 +52,16 @@ void snakeTail::move() {
 		}
 	}
 }
+
+bool snakeTail::hit(const int playerX, const int playerY) {
+	for (int i(0); i < tailX.size(); i++) {
+		if ((tailX[i] == playerX) && (tailY[i] == playerY)) {
+			hitTail = true;
+			i = tailX.size();
+		}
+		else {
+			hitTail = false;
+		}
+	}
+	return(hitTail);
+}
