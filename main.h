@@ -1,19 +1,14 @@
 #pragma once
-#include "SFML/Graphics.hpp"
-#include <Windows.h>
-#include <random>
-#include <iostream>
-
-using namespace sf;
-using namespace std;
+#include "header.h"
+#include "files.h"
 
 
-struct playerRetangle {
-	void draw(RenderWindow&, int, int);
-	void changeDirection(int&, int&, int&);
-	void moveDirection(int&, int&, int&);
-};
-struct checkPlayer {
-	void outOfBounds(const int, const int, bool&, const int, const int);
-};
 
+Clock playClock;
+Time time1;
+
+playerRetangle pMove;
+checkPlayer pCheck;
+lost playerLost;
+applePoint apple;
+snakeTail tail;

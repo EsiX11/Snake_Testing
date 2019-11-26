@@ -85,7 +85,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-main-d.lib;sfml-system-d.lib;sfml-window-d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>NotSet</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -125,11 +125,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="apple.cpp" />
+    <ClCompile Include="checkPlayer.cpp" />
+    <ClCompile Include="gameMech.cpp" />
     <ClCompile Include="player.cpp" />
-    <ClCompile Include="T7_main.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="apple.h" />
+    <ClInclude Include="checkPlayer.h" />
+    <ClInclude Include="files.h" />
+    <ClInclude Include="gameMech.h" />
+    <ClInclude Include="header.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="player.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="fonts\arial.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
