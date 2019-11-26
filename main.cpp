@@ -1,6 +1,6 @@
 #include "main.h"
 
-//fix hitbox out of bounds 
+//turn back on hitbox out of bounds 
 
 void drawBackground(RenderWindow& window,int x, int y) {
 	RectangleShape background;
@@ -38,14 +38,7 @@ int main(){
 
 	window.setFramerateLimit(FPS); // Sets FPS to 60 so it will always run at the same speed
 
-	Clock playClock;
-	Time time1;
 
-	playerRetangle pMove;
-	checkPlayer pCheck;
-	lost playerLost;
-	applePoint apple;
-	snakeTail tail;
 	//random location for apple
 	apple.spawnLocation(sizeWindowX, sizeWindowY, appleX, appleY);
 	// Start the game loop
@@ -75,18 +68,20 @@ int main(){
 			pMove.changeDirection(playerX, playerY, dir); //checks user input (change name)
 			//Slows the game down and makes it able to move in jumps of 10 instead of 5 which is half of the blocks size.
 			if (time1.asMilliseconds() >= 100) {
+
+				tail.currentPosPlayer(playerX, playerY, dir, points);
 				pMove.moveDirection(playerX, playerY, dir, speed); //changes direction. X & Y changed here.
-				pCheck.outOfBounds(playerX, playerY, alive, sizeWindowX, sizeWindowY); //check if player is out of bounds
+				//pCheck.outOfBounds(playerX, playerY, alive, sizeWindowX, sizeWindowY); //check if player is out of bounds
 				pCheck.hitApple(playerX, playerY, appleX, appleY, appleHit); //checks if player hit apple
-				if (appleHit) {
+
+				if (appleHit) { //Fix it not growing after getting 1 but not 2
+					tail.grow(dir, points); //Increases tail length (By pushing back vector with a 0)
 					points++;
 					apple.spawnLocation(sizeWindowX, sizeWindowY, appleX, appleY); //Randomly chooses apple location
-					tail.grow(playerX, playerY, dir, speed, points); //Increases tail length (might be useless)
 					appleHit = false;
 				}
-				if (points > 0) {
-					tail.move(dir, speed, points - 1); //Moves tail with head (Fix this)
-				}
+				tail.move();
+
 				playClock.restart();
 			}
 			if (points > 0) {
