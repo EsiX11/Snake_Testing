@@ -18,5 +18,6 @@ void applePoint::spawnLocation(const int maxX, const int maxY, int& appleLocatio
 	do {
 		appleLocationX = distX(gen);
 		appleLocationY = distY(gen);
-	} while (!((appleLocationX % 10) == 0) || !((appleLocationY % 10) == 0)); //Makes sure that 
+	} while (!((appleLocationX % 10) == 0) || !((appleLocationY % 10) == 0)); //Makes sure that the apple spawns on the grid 
 }
+

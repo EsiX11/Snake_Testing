@@ -15,8 +15,10 @@ public:
 	void draw(RenderWindow&);
 	void currentPosPlayer(const int, const  int);
 	void move();
-private:
+	bool hit(const int, const int);
+protected:
 	vector<int> tailX;
 	vector<int> tailY;
 	RectangleShape rectangle;
+	bool hitTail;
 };

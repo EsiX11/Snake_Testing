@@ -21,44 +21,30 @@ void drawBackground(RenderWindow& window,int x, int y) {
 */
 int main(){
 
-	const int FPS(60); // Sets FPS to 30 so it will always run at the same speed
-	const int sizeWindowX(600), sizeWindowY(400); //Sets the size of the window to a const so it re-usable
-	const int speed(10); //Sets the speed of the player.
-	int playerX(sizeWindowX / 2), playerY(sizeWindowY / 2); //Default spawning location for player. Player starts in center
-	int appleX, appleY;
-	int slowingDownPlayer(1); //Only triggers once at the beginning. (for now)
-	int dir(4); //Default direction for player. Which is the middle of the screen and doesn't move
-	int points(0);
-	bool alive = true; 
-	bool appleHit = false; //set to true to trigger setting apple at random location. Once set it will set it self to false (Not true atm)
-	int testTimer(0);
-	
 	RenderWindow window(VideoMode(sizeWindowX, sizeWindowY, 32), "Snake!"); // Create the main window
 
 	window.setFramerateLimit(FPS); // Sets FPS to 60 so it will always run at the same speed
 
-	//random location for apple
-	apple.spawnLocation(sizeWindowX, sizeWindowY, appleX, appleY);
+	apple.spawnLocation(sizeWindowX, sizeWindowY, appleX, appleY);	//random location for apple
 	// Start the game loop
 	while (window.isOpen())
 	{
 		// Process events
-		Event event;
 		while (window.pollEvent(event))
 		{
 			// Close window: exit
-			if (event.type == Event::Closed)
+			if ((event.type == Event::Closed) || (Keyboard::isKeyPressed(Keyboard::Escape)))
 				window.close();
 		}
-		time1 = playClock.getElapsedTime();
+		time1 = playClock.getElapsedTime(); //Starts timer for game speed
 		//Player drawing + moving
 		if (alive) {
 			// Clear screen
 			window.clear();
 			drawBackground(window, sizeWindowX, sizeWindowY);
-			pMove.changeDirection(playerX, playerY, dir); //checks user input (change name)
 			//Slows the game down and makes it able to move in jumps of 10 instead of 5 which is half of the blocks size.
-			if (time1.asMilliseconds() >= 100) {
+			if (time1.asMilliseconds() >= gameSpeed) {
+				pMove.changeDirection(playerX, playerY, dir); //checks user input (change name)
 				tail.currentPosPlayer(playerX, playerY);
 				pMove.moveDirection(playerX, playerY, dir, speed); //changes direction. X & Y changed here.
 				pCheck.outOfBounds(playerX, playerY, alive, sizeWindowX, sizeWindowY); //check if player is out of bounds
@@ -67,13 +53,16 @@ int main(){
 					points++;
 					tail.grow(); //Increases tail length (By pushing back vector with a 0)
 					apple.spawnLocation(sizeWindowX, sizeWindowY, appleX, appleY); //Randomly chooses apple location
-					appleHit = false;
+					appleHit = false; 
 				}
-				tail.move();
-				playClock.restart();
+				tail.move(); //Moves the tail behind the head
+				playClock.restart(); //Resets to 0 to start counting up again (For game speed)
+				
 			}
 			if (points > 0) {
-				tail.draw(window); //draws tail (Doesn't draw in correct position)(Check notebook)
+				tail.draw(window); //draws tail
+				if ((alive))
+					alive = !(tail.hit(playerX, playerY));
 			}
 			pMove.draw(window, playerX, playerY); //Draws player rectangle
 			apple.draw(window, appleX, appleY); //draws apple at it's assigned random location

@@ -3,7 +3,7 @@
 void playerRetangle::draw(RenderWindow& window, int x, int y) {
 	RectangleShape rectangle;
 	rectangle.setSize(Vector2f(10, 10));
-	rectangle.setFillColor(Color::Green);
+	rectangle.setFillColor(Color::Yellow);
 	rectangle.move(Vector2f(x, y));
 
 	window.draw(rectangle);

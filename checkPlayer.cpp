@@ -21,3 +21,8 @@ void checkPlayer::hitApple( int appleX, int appleY, int playerX, int playerY, bo
 		appleHit = true;
 	}
 }
+
+bool checkPlayer::hitTail(const int playerX, const int playerY) {
+	hit = tail.hit(playerX, playerY);
+	return (hit);
+}
